@@ -21,29 +21,27 @@
 
 @* TODO swithc za pre da li skrol ili wrap*@
 
-    <div style="margin-left:15px;">
+    <div style="margin-left:2px;">
         <form method="post">
 
             <div class="form-group row">
-
-                <label for="path" class="col-form-label">Csv log file full path:</label>
                 <div class="col-6">
-                    <input asp-for="PathToCsvLogFile" class="form-control" type="text">
+                    <input asp-for="PathToCsvLogFile" class="form-control" type="text" placeholder="Csv log file full path">
                 </div>
 
-                <label for="rpp" class="col-form-label">Rows per page</label>
+                <label asp-for="RowsPerPage" style="color:#aaa" class="col-form-label display-3">Rows per page</label>
                 <div class="col-sm-1">
                     <input asp-for="RowsPerPage" class="form-control" type="number">
                 </div>
 
-                <button class="btn btn-dark" type="submit">Refresh</button>
+                <button class="btn btn-primary" type="submit">Refresh</button>
             </div>
 
         </form>
     </div>
     <div class="card">
-        <div class="table-responsive-sm">
-            <table class="table table-striped table-bordered table-dark" style="font-family:Consolas">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-sm table-active table-dark resultsTable" style="font-family: Consolas;">
 
                 <thead>
                     <tr>
@@ -51,7 +49,6 @@
                         <th scope="col">USERNAME</th>
                         <th scope="col">DATABASE</th>
                         <th scope="col">QUERY</th>
-                        <th scope="col">PARAMETERS</th>
                     </tr>
                 </thead>
 
@@ -63,16 +60,28 @@
                         <td scope="col">@log.B_User</td>
                         <td scope="col">@log.C_Database</td>
 
-                        <th scope="col"><pre style="max-width:900px; white-space:pre-wrap;"><code class="pgsql"> @log.N_Statement </code></pre></th>
-                        @if (!string.IsNullOrEmpty(log.O_Parameters))
-                        {
-                            <td scope="col"><pre style="max-width:150px; white-space:pre-wrap;"><code class="pgsql"> @log.O_Parameters </code></pre></td>
+                        <th scope="col">
+                            <pre style="max-width:999px; white-space:pre-wrap;"><code style="background-color: #272B30" class="pgsql"> @log.N_Statement </code></pre>
+                            @if (!string.IsNullOrEmpty(log.O_Parameters))
+                            {
+                            
+                                <pre style="max-width:999px; white-space:pre-wrap;"><code style="background-color: #272B30" class="pgsql"> @log.O_Parameters </code></pre>
+                                
                         }
-                        else
-                        {
-                            <td scope="col"></td>
-                        }
-                    </tr>
+                            </th>
+                            @*@if (!string.IsNullOrEmpty(log.O_Parameters))
+                            {
+                                <td scope="col">
+
+                                    <pre style="max-width:150px; white-space:pre-wrap;"><code class="pgsql"> @log.O_Parameters </code></pre>
+                                    <button class="btn btn-dark" type="submit">Replace params</button>
+                                </td>
+                            }
+                            else
+                            {
+                                <td scope="col"></td>
+                            }*@
+                        </tr>
                     }
                 </tbody>
             </table>

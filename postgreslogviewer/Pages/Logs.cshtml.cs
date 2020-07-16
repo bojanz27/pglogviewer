@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using postgreslogviewer.Models;
 using postgreslogviewer.Parsing;
 
@@ -11,37 +13,30 @@ namespace postgreslogviewer.Pages
     {
         public List<LogEntry> LogEntries { get; set; }
 
+        [BindProperty]
+        public int RowsPerPage { get; set; } = 20;
+
+        [BindProperty]
+        public string PathToCsvLogFile { get; set; }
+
         public async Task OnGet()
         {
-            string path = @"C:\Program Files\PostgreSQL\12\data\log\postgresql-2020-07-08_000000.csv";
+            if (!string.IsNullOrEmpty(PathToCsvLogFile))
+            {
+                LogEntries = new CSVLogReader().GetLogs(PathToCsvLogFile, RowsPerPage);
+            }
+            else 
+                LogEntries = new List<LogEntry>();
+            
+        }
 
-            var logEntries = new CSVLogReader().GetLogs(path);
+        public async Task OnPost()
+        {
+            var logEntries = new CSVLogReader().GetLogs(PathToCsvLogFile, RowsPerPage);
 
             LogEntries = logEntries;
         }
-
-        public async Task OnPost(FilterDTO filter)
-        {
-            
-        }
     }
 
-    public class FilterDTO
-    {
-        public bool A { get; set; }
-        public bool B { get; set; }
-        public bool C { get; set; }
-        public bool D { get; set; }
-        public bool E { get; set; }
-        public bool F { get; set; }
-        public bool G { get; set; }
-        public bool H { get; set; }
-        public bool I { get; set; }
-        public bool J { get; set; }
-        public bool K { get; set; }
-        public bool L { get; set; }
-        public bool M { get; set; }
-        public bool N { get; set; }
-        public bool O { get; set; }
-    }
+  
 }

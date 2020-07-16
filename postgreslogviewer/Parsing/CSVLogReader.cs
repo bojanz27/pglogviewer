@@ -15,7 +15,7 @@ namespace postgreslogviewer.Parsing
 
         }
 
-        public List<LogEntry> GetLogs(string path)
+        public List<LogEntry> GetLogs(string path, int rowsPerPage)
         {
 
             using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -23,7 +23,7 @@ namespace postgreslogviewer.Parsing
             using var csv = new CsvReader(sr, CultureInfo.InvariantCulture);
             {
                 csv.Configuration.HasHeaderRecord = false;
-                return csv.GetRecords<LogEntry>().Take(100).ToList();
+                return csv.GetRecords<LogEntry>().Reverse().Take(rowsPerPage).ToList();
             }
         }
     }

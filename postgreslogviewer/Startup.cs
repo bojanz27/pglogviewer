@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 
 namespace postgreslogviewer
 {
@@ -31,10 +32,10 @@ namespace postgreslogviewer
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
             services.AddMvc()
                 .AddRazorPagesOptions(x=>x.Conventions.AddPageRoute("/Logs", ""))
                 .AddRazorPagesOptions(x=>x.Conventions.AddPageRoute("/Logs", "/Index"))
+                .AddRazorRuntimeCompilation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 

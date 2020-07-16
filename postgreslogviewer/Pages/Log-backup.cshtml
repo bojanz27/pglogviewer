@@ -1,0 +1,115 @@
+﻿@page
+@model postgreslogviewer.Pages.LogsModel
+@{
+}
+
+@*<div id="filter">
+
+        <form asp-page-handler="Filter" asp-route-lang="g" method="post">
+            <div class="input-group">
+                <input asp-for="@Model" class="form-control" type="text" placeholder="search german word" />
+                <div class="input-group-btn">
+                    <input class="btn" type="image" src="~/images/search.svg" alt="Search" />
+                </div>
+            </div>
+        </form>
+    </div>*@
+
+@*https://www.postgresql.org/docs/9.5/runtime-config-logging.html*@
+
+<table class="table table-striped table-dark table-sm table-bordered" style="margin:0px 10px 0px 10px; font-size:12px;">
+
+    <tbody>
+        @foreach (var log in Model.LogEntries)
+        {
+            <tr class="d-flex top-buffer">
+                <td class="col-sm-1">LOG TIME</td>
+                <td class="col-6">@log.A_TimeStamp</td>
+            </tr>
+            <tr class="d-flex">
+                <td class="col-sm-1">USERNAME</td>
+                <td class="col-6">@log.B_User</td>
+            </tr>
+            <tr class="d-flex">
+                <td class="col-sm-1">DATABASE</td>
+                <td class="col-6">@log.C_Database</td>
+            </tr>
+
+            if (!string.IsNullOrEmpty(log.O_Parameters))
+            {
+                <tr class="d-flex">
+                    <td class="col-sm-1">PARAMETERS</td>
+                    <td class="col-6">@log.O_Parameters</td>
+                </tr>
+            }
+            <tr>
+                <td class="col-5" colspan="3"><pre><code class="pgsql"> @log.N_Statement </code></pre></td>
+            </tr>
+
+
+            @*<tr class="d-flex">
+                    <td class="col-1">LOG TIME</td>
+                    <td class="col-1">@log.A_TimeStamp</td>
+                    <td class="col-1">@log.B_User</td>
+                    <td class="col-1">@log.C_Database</td>
+                    <td>@log.D_ProcessId</td>
+                <td>@log.E_Ip</td>
+                <td>@log.F_Na</td>
+                <td>@log.G_Na</td>
+                <td>@log.H_Na</td>
+                <td>@log.I_Na</td>
+                <td>@log.J_Na</td>
+                <td>@log.K_Na</td>
+                <td>@log.L_LogLevel</td>
+                <td>@log.M_Na</td>
+                    <td class="col-6"> <pre><code class="pgsql"> @log.N_Statement </code></pre></td>
+                    <td class="col-1">@log.O_Parameters</td>
+                </tr>*@
+        }
+    </tbody>
+</table>
+
+
+@*<table class="table table-striped table-dark table-sm table-bordered">
+        <thead class="thead-dark">
+            <tr class="d-flex">
+                <th class="col-1">LOG TIME</th>
+                <th class="col-1">USERNAME</th>
+                <th class="col-1">DATABASE</th>
+                <th scope="col">ProcessId</th>
+            <th scope="col">ConnectionFrom</th>
+            <th scope="col">SessionId</th>
+            <th scope="col">session_line_num </th>
+            <th scope="col">command_tag </th>
+            <th scope="col">session_start_time </th>
+            <th scope="col">virtual_transaction_id </th>
+            <th scope="col">transaction_id </th>
+            <th scope="col">error_severity </th>
+            <th scope="col">sql_state_code </th>
+                <th class="col-6">MESSAGE</th>
+                <th class="col-1">DETAILS</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model.LogEntries)
+            {
+                <tr class="d-flex">
+                    <td class="col-1">@log.A_TimeStamp</td>
+                    <td class="col-1">@log.B_User</td>
+                    <td class="col-1">@log.C_Database</td>
+                    <td>@log.D_ProcessId</td>
+                        <td>@log.E_Ip</td>
+                        <td>@log.F_Na</td>
+                        <td>@log.G_Na</td>
+                        <td>@log.H_Na</td>
+                        <td>@log.I_Na</td>
+                        <td>@log.J_Na</td>
+                        <td>@log.K_Na</td>
+                        <td>@log.L_LogLevel</td>
+                        <td>@log.M_Na</td>
+                    <td class="col-6"> <pre><code class="pgsql"> @log.N_Statement </code></pre></td>
+                    <td class="col-1">@log.O_Parameters</td>
+                </tr>
+            }
+        </tbody>
+    </table>*@

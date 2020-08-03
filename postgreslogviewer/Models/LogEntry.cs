@@ -4,6 +4,9 @@ namespace postgreslogviewer.Models
 {
     public class LogEntry
     {
+        [Ignore]
+        public int RowNumber { get; set; }
+
         [Index(0)]
         public string A_TimeStamp { get; set; }
         [Index(1)]
@@ -34,6 +37,5 @@ namespace postgreslogviewer.Models
         public string N_Statement { get; set; }
         [Index(14)]
         public string O_Parameters { get; set; }
-
     }
 }

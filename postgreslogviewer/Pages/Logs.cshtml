@@ -45,6 +45,7 @@
 
                 <thead>
                     <tr>
+                        <th scope="col">#</th>
                         <th scope="col">LOG TIME</th>
                         <th scope="col">USERNAME</th>
                         <th scope="col">DATABASE</th>
@@ -56,6 +57,7 @@
                     @foreach (var log in Model.LogEntries)
                     {
                     <tr>
+                        <th scope="col">@log.RowNumber</th>
                         <td scope="col" style="white-space: nowrap;">@log.A_TimeStamp</td>
                         <td scope="col">@log.B_User</td>
                         <td scope="col">@log.C_Database</td>
@@ -64,24 +66,24 @@
                             <pre style="max-width:999px; white-space:pre-wrap;"><code style="background-color: #272B30" class="pgsql"> @log.N_Statement </code></pre>
                             @if (!string.IsNullOrEmpty(log.O_Parameters))
                             {
-                            
-                                <pre style="max-width:999px; white-space:pre-wrap;"><code style="background-color: #272B30" class="pgsql"> @log.O_Parameters </code></pre>
-                                
-                        }
-                            </th>
-                            @*@if (!string.IsNullOrEmpty(log.O_Parameters))
-                            {
-                                <td scope="col">
 
-                                    <pre style="max-width:150px; white-space:pre-wrap;"><code class="pgsql"> @log.O_Parameters </code></pre>
-                                    <button class="btn btn-dark" type="submit">Replace params</button>
-                                </td>
+                                <pre style="max-width:999px; white-space:pre-wrap;"><code style="background-color: #272B30" class="pgsql"> @log.O_Parameters </code></pre>
+
                             }
-                            else
-                            {
-                                <td scope="col"></td>
-                            }*@
-                        </tr>
+                        </th>
+                        @*@if (!string.IsNullOrEmpty(log.O_Parameters))
+        {
+            <td scope="col">
+
+                <pre style="max-width:150px; white-space:pre-wrap;"><code class="pgsql"> @log.O_Parameters </code></pre>
+                <button class="btn btn-dark" type="submit">Replace params</button>
+            </td>
+        }
+        else
+        {
+            <td scope="col"></td>
+        }*@
+                    </tr>
                     }
                 </tbody>
             </table>

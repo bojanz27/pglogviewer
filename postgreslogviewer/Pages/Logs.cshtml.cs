@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,6 +12,8 @@ namespace postgreslogviewer.Pages
 {
     public class LogsModel : PageModel
     {
+        private readonly CsvLogReader _logReader;
+
         public List<LogEntry> LogEntries { get; set; }
 
         [BindProperty]
@@ -19,11 +22,16 @@ namespace postgreslogviewer.Pages
         [BindProperty]
         public string PathToCsvLogFile { get; set; }
 
+        public LogsModel(CsvLogReader csvLogReader)
+        {
+            _logReader = csvLogReader;
+        }
+        
         public async Task OnGet()
         {
             if (!string.IsNullOrEmpty(PathToCsvLogFile))
             {
-                LogEntries = new CSVLogReader().GetLogs(PathToCsvLogFile, RowsPerPage);
+                LogEntries = _logReader.GetLogs(PathToCsvLogFile, RowsPerPage);
             }
             else 
                 LogEntries = new List<LogEntry>();
@@ -32,7 +40,7 @@ namespace postgreslogviewer.Pages
 
         public async Task OnPost()
         {
-            var logEntries = new CSVLogReader().GetLogs(PathToCsvLogFile, RowsPerPage);
+            var logEntries = _logReader.GetLogs(PathToCsvLogFile, RowsPerPage);
 
             LogEntries = logEntries;
         }

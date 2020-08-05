@@ -16,12 +16,13 @@ namespace postgreslogviewer.Parsing
 
         }
 
-        public List<LogEntry> GetLogs(string path, int rowsPerPage)
+        public List<LogEntry> GetLogs(string path, int rowsPerPage, string dbNames, string excludeContainingText)
         {
-            return EnumerateLogs(path, rowsPerPage).ToList();
+            var dbs = !string.IsNullOrEmpty(dbNames) ? dbNames.Split(',').ToList() : new List<string>();
+            return EnumerateLogs(path, rowsPerPage, dbs, excludeContainingText).ToList();
         }
 
-        public IEnumerable<LogEntry> EnumerateLogs(string path, int rowsPerPage)
+        private IEnumerable<LogEntry> EnumerateLogs(string path, int rowsPerPage, List<string> dbNames, string excludeContainingText)
         {
 
             using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -31,7 +32,18 @@ namespace postgreslogviewer.Parsing
                 csv.Configuration.HasHeaderRecord = false;
 
                 int rowNum = 0;
-                foreach (var rec in csv.GetRecords<LogEntry>().Reverse().Take(rowsPerPage))
+                var query = csv.GetRecords<LogEntry>();
+                if (!string.IsNullOrEmpty(excludeContainingText))
+                    query = query.Where(x => !x.N_Statement.Contains(excludeContainingText));
+                
+                if (dbNames.Count > 0)
+                {
+                    foreach (var db in dbNames)
+                        query = query.Where(x => x.C_Database.StartsWith(db));
+
+                }
+
+                foreach (var rec in query.Reverse().Take(rowsPerPage))
                 {
                     rec.RowNumber = ++rowNum;
                     yield return rec;

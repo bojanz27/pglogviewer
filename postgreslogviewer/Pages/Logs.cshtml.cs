@@ -17,10 +17,16 @@ namespace postgreslogviewer.Pages
         public List<LogEntry> LogEntries { get; set; }
 
         [BindProperty]
-        public int RowsPerPage { get; set; } = 20;
+        public int RowsPerPage { get; set; } = 100;
 
         [BindProperty]
         public string PathToCsvLogFile { get; set; }
+        
+        [BindProperty]
+        public string DbNames { get; set; }
+
+        [BindProperty]
+        public string ExcludeContaining { get; set; } = "statement: /*pga4dash*/";
 
         public LogsModel(CsvLogReader csvLogReader)
         {
@@ -31,7 +37,7 @@ namespace postgreslogviewer.Pages
         {
             if (!string.IsNullOrEmpty(PathToCsvLogFile))
             {
-                LogEntries = _logReader.GetLogs(PathToCsvLogFile, RowsPerPage);
+                LogEntries = _logReader.GetLogs(PathToCsvLogFile, RowsPerPage, DbNames, ExcludeContaining);
             }
             else 
                 LogEntries = new List<LogEntry>();
@@ -40,7 +46,7 @@ namespace postgreslogviewer.Pages
 
         public async Task OnPost()
         {
-            var logEntries = _logReader.GetLogs(PathToCsvLogFile, RowsPerPage);
+            var logEntries = _logReader.GetLogs(PathToCsvLogFile, RowsPerPage, DbNames, ExcludeContaining);
 
             LogEntries = logEntries;
         }

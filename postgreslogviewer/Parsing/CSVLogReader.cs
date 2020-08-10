@@ -33,6 +33,7 @@ namespace postgreslogviewer.Parsing
 
                 int rowNum = 0;
                 var query = csv.GetRecords<LogEntry>();
+
                 if (!string.IsNullOrEmpty(excludeContainingText))
                     query = query.Where(x => !x.N_Statement.Contains(excludeContainingText));
                 
@@ -46,6 +47,10 @@ namespace postgreslogviewer.Parsing
                 foreach (var rec in query.Reverse().Take(rowsPerPage))
                 {
                     rec.RowNumber = ++rowNum;
+                    if (rec.N_Statement.StartsWith("execute <unnamed>:"))
+                    {
+                        rec.N_Statement = rec.N_Statement.Substring(19);
+                    }
                     yield return rec;
                 }
             }

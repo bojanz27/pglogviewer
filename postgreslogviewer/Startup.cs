@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
+using postgreslogviewer.Parsing;
 
 namespace postgreslogviewer
 {
@@ -37,6 +38,8 @@ namespace postgreslogviewer
                 .AddRazorPagesOptions(x=>x.Conventions.AddPageRoute("/Logs", "/Index"))
                 .AddRazorRuntimeCompilation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.AddScoped<CsvLogReader>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

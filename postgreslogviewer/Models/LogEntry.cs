@@ -34,6 +34,5 @@ namespace postgreslogviewer.Models
         public string N_Statement { get; set; }
         [Index(14)]
         public string O_Parameters { get; set; }
-
     }
 }

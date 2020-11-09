@@ -3,87 +3,80 @@
 @{
 }
 
-@*<div id="filter">
+<div style="margin-left:2px;">
+    <form method="post">
 
-        <form asp-page-handler="Filter" asp-route-lang="g" method="post">
-            <div class="input-group">
-                <input asp-for="@Model" class="form-control" type="text" placeholder="search german word" />
-                <div class="input-group-btn">
-                    <input class="btn" type="image" src="~/images/search.svg" alt="Search" />
-                </div>
-            </div>
-        </form>
-    </div>*@
-@*table-striped table-sm table-dark table-bordered*@
-@*https://www.postgresql.org/docs/9.5/runtime-config-logging.html*@
-
-@*<div class="table-responsive">*@
-
-@* TODO swithc za pre da li skrol ili wrap*@
-
-    <div style="margin-left:2px;">
-        <form method="post">
-
-            <div class="form-group row">
+        <div class="form-group row">
                 <div class="col-6">
                     <input asp-for="PathToCsvLogFile" class="form-control" type="text" placeholder="Csv log file full path">
                 </div>
-
                 <label asp-for="RowsPerPage" style="color:#aaa" class="col-form-label display-3">Rows per page</label>
                 <div class="col-sm-1">
                     <input asp-for="RowsPerPage" class="form-control" type="number">
                 </div>
+                <div class="form-check">
+                    <input type="checkbox" asp-for="ReplaceParams" id="Chbx" class="form-check-input">
+                    <label class="form-check-label" style="color:#aaa; margin-right:10px;" for="Chbx">Replace params</label>
+                </div>
+            <button class="btn btn-primary float-right" type="submit">Load</button>
+        </div>
 
-                <button class="btn btn-primary" type="submit">Refresh</button>
-            </div>
+    </form>
+</div>
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm table-active table-dark resultsTable" style="font-family: Consolas;">
 
-        </form>
-    </div>
-    <div class="card">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered table-sm table-active table-dark resultsTable" style="font-family: Consolas;">
+            <thead>
+                <tr>
+                    <th scope="col">LOG TIME</th>
+                    <th scope="col">USERNAME</th>
+                    <th scope="col">DATABASE</th>
+                    <th scope="col">QUERY</th>
+                    @*<th scope="col">PARAMETERS</th>*@
+                </tr>
+            </thead>
 
-                <thead>
-                    <tr>
-                        <th scope="col">LOG TIME</th>
-                        <th scope="col">USERNAME</th>
-                        <th scope="col">DATABASE</th>
-                        <th scope="col">QUERY</th>
-                    </tr>
-                </thead>
-
-                <tbody style="font-size:12px; font-family:Consolas">
-                    @foreach (var log in Model.LogEntries)
-                    {
+            <tbody style="font-size:12px; font-family:Consolas">
+                @{int rowId = 1; }
+                @foreach (var log in Model.LogEntries)
+                {
                     <tr>
                         <td scope="col" style="white-space: nowrap;">@log.A_TimeStamp</td>
                         <td scope="col">@log.B_User</td>
                         <td scope="col">@log.C_Database</td>
 
-                        <th scope="col">
+                        <td scope="col" id="statement-@rowId">
                             <pre style="max-width:999px; white-space:pre-wrap;"><code style="background-color: #272B30" class="pgsql"> @log.N_Statement </code></pre>
                             @if (!string.IsNullOrEmpty(log.O_Parameters))
                             {
-                            
                                 <pre style="max-width:999px; white-space:pre-wrap;"><code style="background-color: #272B30" class="pgsql"> @log.O_Parameters </code></pre>
-                                
-                        }
-                            </th>
-                            @*@if (!string.IsNullOrEmpty(log.O_Parameters))
+
+                            }
+                        </td>
+                        @*@if (!string.IsNullOrEmpty(log.O_Parameters))
                             {
+                                var parameters = log.O_Parameters;
+                                if (parameters.StartsWith("parameters:"))
+                                {
+                                    parameters = parameters.Substring(11).Trim();
+                                }
+                                var paramsList = parameters.Split(',');
+                                parameters = string.Join(Environment.NewLine, paramsList);
+
                                 <td scope="col">
 
-                                    <pre style="max-width:150px; white-space:pre-wrap;"><code class="pgsql"> @log.O_Parameters </code></pre>
-                                    <button class="btn btn-dark" type="submit">Replace params</button>
+                                  <pre><code class="cs"> @parameters</code></pre>
+                                  <button name="btnreplace" rowId="@rowId" class="btn btn-dark" type="submit">&lt;&lt; Replace parameters in query</button>
                                 </td>
                             }
                             else
                             {
                                 <td scope="col"></td>
                             }*@
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
+</div>

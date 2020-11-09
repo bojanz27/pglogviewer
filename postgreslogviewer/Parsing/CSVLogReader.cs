@@ -8,10 +8,10 @@ using System.Linq;
 
 namespace postgreslogviewer.Parsing
 {
-    public class CSVLogReader
+    public class CsvLogReader
     {
 
-        public CSVLogReader()
+        public CsvLogReader()
         {
 
         }

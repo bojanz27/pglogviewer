@@ -25,7 +25,7 @@ namespace postgreslogviewer.Pages
         {
             if (!string.IsNullOrEmpty(PathToCsvLogFile))
             {
-                LogEntries = new CSVLogReader().GetLogs(PathToCsvLogFile, RowsPerPage, ReplaceParams);
+                LogEntries = new CsvLogReader().GetLogs(PathToCsvLogFile, RowsPerPage, ReplaceParams);
             }
             else 
                 LogEntries = new List<LogEntry>();
@@ -34,7 +34,7 @@ namespace postgreslogviewer.Pages
 
         public async Task OnPost()
         {
-            var logEntries = new CSVLogReader().GetLogs(PathToCsvLogFile, RowsPerPage, ReplaceParams);
+            var logEntries = new CsvLogReader().GetLogs(PathToCsvLogFile, RowsPerPage, ReplaceParams);
 
             LogEntries = logEntries;
         }

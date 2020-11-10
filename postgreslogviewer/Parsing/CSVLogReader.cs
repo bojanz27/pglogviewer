@@ -16,7 +16,7 @@ namespace postgreslogviewer.Parsing
 
         }
 
-        public List<LogEntry> GetLogs(string path, int rowsPerPage, bool replaceParams)
+        public List<LogEntry> GetLogs(string path, int rowsPerPage, bool replaceParams, string databases)
         {
             try
             {
@@ -26,7 +26,19 @@ namespace postgreslogviewer.Parsing
                 using var csv = new CsvReader(sr, CultureInfo.InvariantCulture);
                 {
                     csv.Configuration.HasHeaderRecord = false;
-                    var recordsEnum = csv.GetRecords<LogEntry>().Reverse().Take(rowsPerPage);
+
+                    var recordsEnum = csv.GetRecords<LogEntry>()
+                        .Where(x => !x.N_Statement.StartsWith("statement: /*pga4dash*/"))
+                        .Reverse();
+
+
+                    if (!string.IsNullOrEmpty(databases))
+                    {
+                        List<string> dbs = databases.Split(',').Select(x => x.Trim()).ToList();
+                        recordsEnum = recordsEnum.Where(x => dbs.Contains(x.C_Database));
+                    }
+
+                    recordsEnum = recordsEnum.Take(rowsPerPage);
                     
                     if (!replaceParams)
                         return recordsEnum.ToList();
@@ -48,6 +60,8 @@ namespace postgreslogviewer.Parsing
                 return new List<LogEntry>();
             }
         }
+
+        
 
         private void ReplaceParams(LogEntry r)
         {

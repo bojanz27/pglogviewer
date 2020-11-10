@@ -19,13 +19,15 @@ namespace postgreslogviewer.Pages
         [BindProperty]
         public string PathToCsvLogFile { get; set; }
         [BindProperty]
+        public string Databases { get; set; }
+        [BindProperty]
         public bool ReplaceParams { get; set; }
 
         public async Task OnGet()
         {
             if (!string.IsNullOrEmpty(PathToCsvLogFile))
             {
-                LogEntries = new CsvLogReader().GetLogs(PathToCsvLogFile, RowsPerPage, ReplaceParams);
+                LogEntries = new CsvLogReader().GetLogs(PathToCsvLogFile, RowsPerPage, ReplaceParams, Databases);
             }
             else 
                 LogEntries = new List<LogEntry>();
@@ -34,7 +36,7 @@ namespace postgreslogviewer.Pages
 
         public async Task OnPost()
         {
-            var logEntries = new CsvLogReader().GetLogs(PathToCsvLogFile, RowsPerPage, ReplaceParams);
+            var logEntries = new CsvLogReader().GetLogs(PathToCsvLogFile, RowsPerPage, ReplaceParams, Databases);
 
             LogEntries = logEntries;
         }

@@ -7,18 +7,27 @@
     <form method="post">
 
         <div class="form-group row">
-                <div class="col-6">
-                    <input asp-for="PathToCsvLogFile" class="form-control" type="text" placeholder="Csv log file full path">
-                </div>
-                <label asp-for="RowsPerPage" style="color:#aaa" class="col-form-label display-3">Rows per page</label>
-                <div class="col-sm-1">
-                    <input asp-for="RowsPerPage" class="form-control" type="number">
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" asp-for="ReplaceParams" id="Chbx" class="form-check-input">
-                    <label class="form-check-label" style="color:#aaa; margin-right:10px;" for="Chbx">Replace params</label>
-                </div>
-            <button class="btn btn-primary float-right" type="submit">Load</button>
+            <div class="col-6 input-group-sm">
+                <label asp-for="PathToCsvLogFile" style="color:#aaa" class="col-form-label display-3">Csv log file full path</label>
+                <input asp-for="PathToCsvLogFile" class="form-control" type="text" placeholder="">
+            </div>
+            <div class="col-1 input-group-sm">
+                <label asp-for="RowsPerPage" style="color:#aaa" class="col-form-label display-3">Page size</label>
+                <input asp-for="RowsPerPage" class="form-control" type="text">
+            </div>
+            <div class="col-3 float-left input-group-sm">
+                <label asp-for="Databases" style="color:#aaa" class="col-form-label display-3">Databases, comma-separated</label>
+                <input asp-for="Databases" class="form-control" type="text" placeholder="">
+            </div>
+            <div class="float-right input-group-sm">
+                <button class="btn btn-primary" style="margin-top:35px;" type="submit">Load</button>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="input-group-sm" style="margin-left:15px;">
+                <input type="checkbox" asp-for="ReplaceParams" id="Chbx" class="form-check-inline">
+                <label style="color:#aaa;" for="Chbx">Replace parameters in query</label>
+            </div>
         </div>
 
     </form>
